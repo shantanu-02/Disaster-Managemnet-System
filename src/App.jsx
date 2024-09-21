@@ -15,6 +15,7 @@ import Plans from "./components/Plans";
 import DisasterPage from "./components/DisasterPage";
 import Layout from "./components/layout";
 import FloodsReady from "./components/FloodsReady";
+import Chatbot from "./components/Chatbot";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <div className="mt-20">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/chatbot" element={<Chatbot />} />
             <Route path="/social_media" element={<Service />} />
             <Route path="/services" element={<DisasterResourceApp />} />
             <Route
