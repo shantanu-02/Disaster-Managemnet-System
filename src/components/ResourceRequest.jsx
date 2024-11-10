@@ -3,6 +3,7 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../resource.css";
+import emailjs from "emailjs-com"; // Import EmailJS
 
 const initialState = {
   state: null,
@@ -278,14 +279,32 @@ const DisasterResourceApp = () => {
   };
 
   const handleSendRequest = () => {
-    console.log("Sending supply request:", formData);
-  };
+    const templateParams = {
+        state: formData.state.value,
+        district: formData.district.value,
+        category: formData.category.value,
+        item: formData.item.value,
+        fromDate: formData.fromDate,
+        endDate: formData.endDate,
+    };
+
+    emailjs.send("service_pfziuf6", "template_4y0nuyr", templateParams, "5-6hk_JU1p-xcVbvp")
+        .then((response) => {
+            console.log("Email sent successfully:", response);
+            alert("Your request has been sent successfully!");  // Popup alert
+        })
+        .catch((error) => {
+            console.error("Error sending email:", error);
+            alert("There was an error sending your request.");  // Popup alert for error
+        });
+};
+
 
   return (
     <div className="p-5 mx-auto w-[75vw] bg-white border border-gray-300 px-4 py-8 mt-32 rounded-lg drop-shadow-xl">
       <div className="mb-2 text-4xl font-bold">Resources Requests</div>
       <div className="mb-8 text-lg font-semibold">
-        AI model to update equipment needs
+        AI model to update equipment needs
       </div>
       <div className="flex gap-4">
         <div className="mb-4 w-full">
@@ -330,7 +349,6 @@ const DisasterResourceApp = () => {
           />
         </div>
       </div>
-
       <div className="flex gap-4">
         <div className="md:w-full mb-4 border border-gray-400 p-2 rounded-md">
           <DatePicker
@@ -351,20 +369,18 @@ const DisasterResourceApp = () => {
         </div>
       </div>
 
-      <div className=" flex gap-4">
-        <button
-          className="send-request-button hover:border-[#1e4356] hover:bg-[rgba(30,67,86,0.9)]"
-          onClick={handleSendRequest}
-        >
-          Send Supply Request
-        </button>
-        <button
-          className="reset-button hover:border-[#ccc]"
-          onClick={handleReset}
-        >
-          Reset
-        </button>
-      </div>
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        onClick={handleSendRequest}
+      >
+        Send Request
+      </button>
+      <button
+        className="ml-4 px-4 py-2 bg-red-500 text-white rounded-md"
+        onClick={handleReset}
+      >
+        Reset
+      </button>
     </div>
   );
 };

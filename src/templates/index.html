@@ -3,111 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Classification</title>
+    <title>Disaster Prediction</title>
     <style>
-
         @import url('https://fonts.googleapis.com/css?family=Roboto');
 
         * {
-          font-family: 'Roboto', sans-serif;
-          font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
         }
 
         body {
-          background-color: #f0f0f0;
-          text-align: center;
+            background-color: #f0f0f0;
+            text-align: center;
         }
 
-        h1 {
-          color: #333333;
-          margin: 20px 0;
-        }
-
-        h2 {
-          color: #666666;
-          margin: 10px 0;
+        h1, h2 {
+            color: #333333;
+            margin: 20px 0;
         }
 
         form {
-          display: inline-block;
-          border: 1px solid #cccccc;
-          padding: 20px;
-          background-color: #ffffff;
+            display: inline-block;
+            border: 1px solid #cccccc;
+            padding: 20px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
         }
 
         input {
-          display: block;
-          margin: 10px auto;
+            display: block;
+            margin: 10px auto;
         }
 
         button {
-          display: block;
-          margin: 10px auto;
-          padding: 10px 20px;
-          border: none;
-          background-color: #333333;
-          color: #ffffff;
-          cursor: pointer;
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            border: none;
+            background-color: #333333;
+            color: #ffffff;
+            cursor: pointer;
         }
 
         p {
-          color: #333333;
-          margin: 10px 0;
+            color: #333333;
+            margin: 10px 0;
         }
+
         @media screen and (max-width: 600px) {
-          form {
-            width: 80%;
-          }
+            form {
+                width: 80%;
+            }
         }
 
         @media screen and (min-width: 601px) and (max-width: 800px) {
-          form {
-            width: 60%;
-          }
+            form {
+                width: 60%;
+            }
         }
 
         @media screen and (min-width: 801px) {
-          form {
-            width: 40%;
-          }
+            form {
+                width: 40%;
+            }
         }
     </style>
     <script>
-      var fileInput = document.getElementById("file-upload");
-
-      fileInput.addEventListener("change", function() {
-        var file = fileInput.files[0];
-        if (file.type.match("image.*")) {
-          var reader = new FileReader();
-          reader.onload = function(e) {
-            var image = document.createElement("img");
-            image.src = e.target.result;
-            image.width = 150;
-            image.height = 200;
-
-            var form = document.querySelector("form");
-
-            form.insertBefore(image, form.lastElementChild);
-          };
-
-          reader.readAsDataURL(file);
-        }
-      });
+        // File preview script for the image form
+        var fileInput = document.getElementById("file-upload");
+        fileInput.addEventListener("change", function() {
+            var file = fileInput.files[0];
+            if (file && file.type.match("image.*")) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var image = document.createElement("img");
+                    image.src = e.target.result;
+                    image.width = 150;
+                    image.height = 200;
+                    var form = document.querySelector("form");
+                    form.insertBefore(image, form.lastElementChild);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     </script>
 </head>
 <body>
-    <h1>Image Classification</h1>
+    <h1>Disaster Prediction</h1>
 
-    <form action="/predict" method="post" enctype="multipart/form-data">
+    <h2>Image Classification</h2>
+    <form action="/predict_image" method="post" enctype="multipart/form-data">
         <input type="file" name="image" accept="image/*" required>
-        <button type="submit">Predict</button>
+        <button type="submit">Predict Image</button>
     </form>
 
-    {% if result %}
-    <h2>Result:</h2>
-    <p>Predicted Class: {{ result.class }}</p>
-    <p>Information: {{ result.info }}</p>
-{% endif %}
+    {% if result_image %}
+    <h2>Image Result:</h2>
+    <p>Predicted Class: {{ result_image.class }}</p>
+    <p>Information: {{ result_image.info }}</p>
+    {% endif %}
+
+    <h2>Infrastructure Assessment</h2>
+    <form action="/predict_infra" method="post" enctype="multipart/form-data">
+        <input type="file" name="infrastructure_image" accept="image/*" required>
+        <button type="submit">Assess Infrastructure</button>
+    </form>
+
+    {% if result_infra %}
+    <h2>Infrastructure Result:</h2>
+    <p>Damage Class: {{ result_infra.damage_class }}</p>
+    <p>Information: {{ result_infra.damage_info }}</p>
+    {% endif %}
 
 </body>
 </html>
